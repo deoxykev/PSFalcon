@@ -13,6 +13,10 @@ function Start-RtrBatch {
 
     .PARAMETER TIMEOUT
         Time to wait for the command request to complete, in seconds [default: 30]
+        
+    .PARAMETER QUEUEOFFLINE
+        Optional switch to queue the RTR command for offline hosts
+        
 #>
     [CmdletBinding()]
     [OutputType([psobject])]
@@ -28,6 +32,10 @@ function Start-RtrBatch {
         [ValidateRange(30,600)]
         [int]
         $Timeout = 30
+        
+        [switch]
+        $QueueOffline
+        
     )
     process{
         $Param = @{
@@ -43,6 +51,7 @@ function Start-RtrBatch {
         }
         switch ($PSBoundParameters.Keys) {
             'Existing' { $Param.Body['existing_batch_id'] = $Existing }
+            'QueueOffline' { $Param.Body['queue_offline'] = $true }
             'Verbose' { $Param['Verbose'] = $true }
             'Debug' { $Param['Debug'] = $true }
         }
